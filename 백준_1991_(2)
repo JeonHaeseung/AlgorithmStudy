@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    char data;
+    struct Node *left;
+    struct Node *right;
+}Node;
+Node array[27];
+ 
+void preorder(Node *Tree)
+{
+    if (Tree!=NULL){
+      printf("%c", Tree->data);
+      preorder(Tree->left);
+      preorder(Tree->right);
+    }
+    
+}
+void inorder(Node *Tree)
+{
+    if (Tree!=NULL){
+      inorder(Tree->left);
+      printf("%c", Tree->data);
+      inorder(Tree->right);
+    } 
+}
+void postorder(Node *Tree)
+{
+    if (Tree!=NULL){
+      postorder(Tree->left);
+      postorder(Tree->right);
+      printf("%c", Tree->data);
+    }
+}
+ 
+int main()
+{
+    
+    Node *tmp;
+    int NodeNum;
+
+    
+    scanf("%d", &NodeNum);
+    getchar(); //버퍼에 남아 있던 \n 을 날려버리기
+    char TempNode[NodeNum][3];
+
+
+    for (int i = 0;i < NodeNum; i++) //한 줄씩 입력받기
+    {
+      scanf("%c %c %c", &TempNode[i][0], &TempNode[i][1], &TempNode[i][2]);
+      getchar();
+    }
+
+
+    for(int i=NodeNum-1 ; i>=0 ; i-- ){
+      array[i].data = TempNode[i][0];
+      if(TempNode[i][1]== '.'){
+        array[i].left = NULL;
+      }
+      else{
+        for(int j = i+1 ; j<NodeNum ; j++){
+          if(array[j].data == TempNode[i][1]){
+            array[i].left = &array[j];
+          }
+        }
+      }
+      if(TempNode[i][2]== '.'){
+        array[i].right = NULL;
+      }
+      else{
+        for(int j = i+1 ; j<NodeNum ; j++){
+          if(array[j].data == TempNode[i][2]){
+            array[i].right = &array[j];
+          }
+        }
+      }
+    }
+
+    Node *Tree = &array[0];
+
+
+    preorder(Tree);
+    printf("\n");
+
+    inorder(Tree);
+    printf("\n");
+
+    postorder(Tree);
+    printf("\n");
+}
