@@ -1,0 +1,107 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    char data;
+    struct Node *left;
+    struct Node *right;
+}Node;
+Node *NewNode(char data)
+{
+    Node *New;
+    New = (Node*)malloc(sizeof(Node));
+    New->data = data;
+    New->left = NULL;
+    New->right= NULL;
+    return New;
+}
+Node *search_Node(Node *Tree, char data)
+{
+    if (Tree != NULL) {
+        if (Tree->data==data) {
+            return Tree;
+        }
+        else {
+            Node *tmp = search_Node(Tree->left,data);
+            if (tmp != NULL) {
+                return tmp; 
+            }
+            
+            return search_Node(Tree->right,data);
+        }
+    }
+    return NULL;
+}
+void insert_Node(Node *Tree, char A, char left, char right)
+{
+    Tree->data = A;
+    if (left != '.')
+    {
+        Tree->left = NewNode(left);
+    }
+    if (right != '.')
+    {
+        Tree->right = NewNode(right);
+    }
+}
+ 
+void preorder(Node *Tree)
+{
+    if (Tree!=NULL)
+        printf("%c", Tree->data);
+    if (Tree->left!=NULL)
+    preorder(Tree->left);
+    if (Tree->right != NULL)
+    preorder(Tree->right);
+}
+void inorder(Node *Tree)
+{
+    if (Tree->left!=NULL)
+    inorder(Tree->left);
+    if (Tree != NULL)
+        printf("%c", Tree->data);
+    if (Tree->right!=NULL)
+    inorder(Tree->right);
+}
+void postorder(Node *Tree)
+{
+    if (Tree->left != NULL)
+    postorder(Tree->left);
+    if (Tree->right != NULL)
+    postorder(Tree->right);
+    if (Tree != NULL)
+        printf("%c", Tree->data);
+}
+ 
+int main()
+{
+    Node *Tree = NewNode(NULL);
+    Node *tmp;
+    int NodeNum;
+    int i;
+
+    scanf("%d", &NodeNum);
+    getchar(); //버퍼에 남아 있던 \n 을 날려버리기
+
+    for (i = 0;i < NodeNum; i++)
+    {
+        char data, left, right;
+        scanf("%c %c %c", &data, &left, &right);
+        getchar();  //버퍼에 남아 있던 \n 을 날려버리기
+
+        tmp = search_Node(Tree, data);
+
+        if (tmp != NULL)
+            insert_Node(tmp, data, left, right);
+        else
+        insert_Node(Tree, data, left, right);
+    }
+    preorder(Tree);
+    printf("\n");
+
+    inorder(Tree);
+    printf("\n");
+
+    postorder(Tree);
+    printf("\n");
+}
