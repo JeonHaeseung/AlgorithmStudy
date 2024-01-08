@@ -13,3 +13,14 @@ import sys
 
 # map 함수를 통해서 int 형으로 값을 받아옴
 N, K = map(int, sys.stdin.readline().split())
+
+jew = []
+for _ in range(N):
+    # 무게 M, 가격 V
+    jew.append(list(map(int, sys.stdin.readline.split())))
+
+bags = []
+for _ in range(K):
+    # 최대 무게 C 배열에 저장
+    bags.append(int(sys.stdin.readline()))
+bags.sort()
