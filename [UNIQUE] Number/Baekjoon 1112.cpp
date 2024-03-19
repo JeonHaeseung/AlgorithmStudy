@@ -16,77 +16,91 @@
 
 using namespace std;
 
-string translate_minus(int x, int b){
+string translate_minus(int x, int b)
+{
     int quotient = 1;
     int remainder = 1;
     int present_num = x;
     string answer = "";
-    
-     while(quotient!=0){
-        quotient = present_num/b;
-        remainder = present_num%b;
-        
-        if(remainder<0){
-            if(quotient<0){
-                quotient = (present_num/b)-1;
-            } else{
-                quotient = (present_num/b)+1;
+
+    while (quotient != 0)
+    {
+        quotient = present_num / b;
+        remainder = present_num % b;
+
+        if (remainder < 0)
+        {
+            if (quotient < 0)
+            {
+                quotient = (present_num / b) - 1;
             }
-            remainder = present_num - quotient*b;
+            else
+            {
+                quotient = (present_num / b) + 1;
+            }
+            remainder = present_num - quotient * b;
         }
 
         // 몫 업데이트
         present_num = quotient;
-        
+
         answer = to_string(remainder) + answer;
     }
-    
+
     return answer;
 }
 
-string translate_plus(int x, int b){
+string translate_plus(int x, int b)
+{
     int quotient = 1;
     int remainder = 1;
     int present_num = x;
     string answer = "";
-    
-     while(quotient!=0){
-        quotient = present_num/b;
-        remainder = present_num%b;
+
+    while (quotient != 0)
+    {
+        quotient = present_num / b;
+        remainder = present_num % b;
 
         // 몫 업데이트
         present_num = quotient;
-        
+
         answer = to_string(remainder) + answer;
     }
-    
+
     return answer;
 }
 
-string change_num(int x, int b){
-    //초기화
+string change_num(int x, int b)
+{
+    // 초기화
     string answer = "";
-    
-    if(b<0){ //음의 진법 변환인 경우
+
+    if (b < 0)
+    { // 음의 진법 변환인 경우
         answer = translate_minus(x, b);
-    }else{ //양의 진법 변환인 경우
+    }
+    else
+    { // 양의 진법 변환인 경우
         answer = translate_plus(abs(x), b);
-        if(x<0){
+        if (x < 0)
+        {
             answer = "-" + answer;
         }
     }
     return answer;
 }
 
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
 
-int main() {
-    ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-    
-    int x; //최소~최대가 -10억~10억이므로 int 형으로도 충분분
+    int x; // 최소~최대가 -10억~10억이므로 int 형으로도 충분분
     int b;
-    
+
     cin >> x >> b;
-    
+
     cout << change_num(x, b);
-    
 }
