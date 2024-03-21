@@ -68,9 +68,9 @@ string change_num(int x, int b) {
     // 초기화
     string answer = "";
 
-    if (b < 0) {  // 음의 진법 변환인 경우
+    if (b < 0) { // 음의 진법 변환인 경우
         answer = translate_minus(x, b);
-    } else {  // 양의 진법 변환인 경우
+    } else { // 양의 진법 변환인 경우
         answer = translate_plus(abs(x), b);
         if (x < 0) {
             answer = "-" + answer;
@@ -84,7 +84,7 @@ int main() {
     cin.tie(0);
     cout.tie(0);
 
-    int x;  // 최소~최대가 -10억~10억이므로 int 형으로도 충분분
+    int x; // 최소~최대가 -10억~10억이므로 int 형으로도 충분분
     int b;
 
     cin >> x >> b;

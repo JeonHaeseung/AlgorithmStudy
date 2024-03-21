@@ -6,9 +6,8 @@
 버전: v1
 */
 
-#include <stdio.h>
-
 #include <iostream>
+#include <stdio.h>
 #include <string>
 #include <vector>
 
@@ -17,17 +16,24 @@ using namespace std;
 long long final_answer = 0;
 
 /* 0이상 20 이하인지 확인*/
-bool check_arrage(int curr_num) { return (curr_num >= 0 && curr_num <= 20); }
+bool check_arrage(int curr_num) {
+    return (curr_num >= 0 && curr_num <= 20);
+}
 
 /* 정답이 맞는지 확인 */
-bool check_answer(int result, int answer) { return (result == answer); }
+bool check_answer(int result, int answer) {
+    return (result == answer);
+}
 
-bool check_possible(int curr_idx, int curr_num, int answer, vector<long> &number_sums) { return (answer >= curr_num - number_sums[curr_idx + 1] && answer <= curr_num + number_sums[curr_idx + 1]); }
+bool check_possible(int curr_idx, int curr_num, int answer, vector<long> &number_sums) {
+    return (answer >= curr_num - number_sums[curr_idx + 1] && answer <= curr_num + number_sums[curr_idx + 1]);
+}
 
 /* 재귀적인 방식으로 답을 통과
 curr_num은 여태까지 계산한 결과
 bool 값 반환에서 리펙토링*/
 void count_answer(int n, int curr_idx, int curr_num, vector<long> &numbers, vector<long> &number_sums) {
+
     // 백트래킹
     // 범위가 안 맞는 경우에는 리턴
     if (!check_arrage(curr_num)) {
