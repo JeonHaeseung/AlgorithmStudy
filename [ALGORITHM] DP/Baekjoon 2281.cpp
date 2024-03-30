@@ -1,11 +1,14 @@
+#include <algorithm>
+#include <climits>
 #include <iostream>
+#include <math.h>
 #include <vector>
 
 using namespace std;
 
 int find_answer(int idx, int n, int m, vector<int> &names, vector<int> &dp) {
     // 이미 계산한 DP라면 pass
-    if (dp[idx] != -1) {
+    if (dp[idx] < INT_MAX) {
         return dp[idx];
     }
 
@@ -34,7 +37,7 @@ int main() {
     vector<int> names(n);
 
     // n번째 이름까지 계산한 결과를 저장하는 배열 dp
-    vector<int> dp(n, -1);
+    vector<int> dp(n + 1, INT_MAX);
     // 마지막 줄은 계산하지 않음
     dp[n - 1] = 0;
 

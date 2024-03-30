@@ -1,3 +1,11 @@
+/*
+문제 링크: https://www.acmicpc.net/problem/2281
+문제 이름: [2281번] 데스노트
+카테고리: BEAKJOON
+최종 업로드 날짜: 2023.03.23
+버전: v1
+*/
+
 #include <algorithm>
 #include <iostream>
 #include <math.h>
