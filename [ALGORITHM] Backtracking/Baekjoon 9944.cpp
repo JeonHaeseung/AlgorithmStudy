@@ -2,17 +2,17 @@
 문제 링크: https://www.acmicpc.net/problem/9944
 문제 이름: [9944번] NxM 보드 완주하기
 카테고리: BEAKJOON
-최종 업로드 날짜: 2023.03.30
-버전: v1
+최종 업로드 날짜: 2023.04.05
+버전: v2
 */
 
-/*문제 풀이: 가능한 이동 경로의 수는 1,000,000개를 넘지 않는다고 했으므로,
-worst case에서도 브루트 포스로도 충분히 풀 수 있다.
-이 경우에 백트레킹을 조합해서 연산을 줄인다.
+/*문제 풀이: DFS로 풀어야 하는 문제라는 건 감이 왔었는데, direction을 보존하는 방법을 몰랐다.
+case를 나눠서 direction이 보존되는 경우/아닌 경우로 재귀호출을 하면 된다.
  */
 
+#include <climits>
 #include <iostream>
-#include <queue>
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -24,7 +24,7 @@ int n; // 세로
 int m; // 가로
 int case_num = 1;
 int empty_points_num; // 빈 공간이자 시작점이 될 수 있는 값
-int final_answer = 1000000;
+int final_answer = INT_MAX;
 
 // 미로의 범위 내이고, 장애물이 아닌데 이전에 방문했던적이 없는 경우
 bool check_possible(int next_x, int next_y, vector<vector<int>> &board, vector<vector<int>> &visited) {
@@ -35,9 +35,9 @@ bool check_possible(int next_x, int next_y, vector<vector<int>> &board, vector<v
 }
 
 void direction(int x, int y, int d, int visited_point_num, int turn_count, vector<vector<int>> &board, vector<vector<int>> &visited) {
-    if (visited_point_num == empty_points_num) { // 모든 길을 방문했다면 return
+    // 모든 길을 방문했다면 return
+    if (visited_point_num >= empty_points_num) {
         if (final_answer > turn_count) {
-            cout << final_answer << '\n';
             final_answer = turn_count;
         }
         return;
@@ -52,6 +52,7 @@ void direction(int x, int y, int d, int visited_point_num, int turn_count, vecto
         visited[next_x][next_y] = 1;
         direction(next_x, next_y, d, visited_point_num + 1, turn_count, board, visited);
         visited[next_x][next_y] = 0;
+
     } else { // direction(d)을 바꿔야 하는 상황이라면
         for (int i = 0; i < 4; i++) {
             if (i == d)
@@ -61,7 +62,8 @@ void direction(int x, int y, int d, int visited_point_num, int turn_count, vecto
 
             if (check_possible(next_x, next_y, board, visited)) {
                 visited[next_x][next_y] = 1;
-                direction(next_x, next_y, d, visited_point_num + 1, turn_count + 1, board, visited);
+                // 여기 i로 두어야 하는 걸 d로 두어서 에러 났었음, direction 바꿔야 하니 i로 두어야 함
+                direction(next_x, next_y, i, visited_point_num + 1, turn_count + 1, board, visited);
                 visited[next_x][next_y] = 0;
             }
         }
@@ -92,38 +94,41 @@ int main() {
     cin.tie(0);
     cout.tie(0);
 
+    // 정해지지 않은 test case
     while (cin >> n >> m) {
-        vector<vector<int>> board(n, vector<int>(m, 0));
-        vector<vector<int>> visited(n, vector<int>(m, 0));
+        // n, m에 딱 맞추어 board 및 visited 생성하면 런타임 에러 (OutOfBounds) 발생
+        vector<vector<int>> board(31, vector<int>(31, 0));
+        vector<vector<int>> visited(31, vector<int>(31, 0));
         vector<pair<int, int>> empty_points;
-        char arr[30][30];
 
         for (int i = 0; i < n; i++) {
+            string temp;
+            cin >> temp; // 한 줄 읽기
             for (int j = 0; j < m; j++) {
-                cin >> arr[i][j];
-            }
-        }
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (arr[i][j] == '.') { // 빈 공간
+                if (temp[j] == '.') { // 빈 공간
                     board[i][j] = 1;
                     empty_points.push_back(make_pair(i, j)); // 시작점으로 가능한 공간
                 }
-                if (arr[i][j] == '*') { // 장애물
+                if (temp[j] == '*') { // 장애물
                     board[i][j] = 0;
                 }
             }
         }
 
         empty_points_num = empty_points.size();
+
         find_anwser(board, visited, empty_points);
-        if (final_answer == 1000000) {
+
+        // 모든 길을 방문하는 게 불가능한 경우
+        if (final_answer == INT_MAX) {
             final_answer = -1;
         }
+
         cout << "Case " << case_num << ": " << final_answer << "\n";
-        final_answer = 1000000; // 리셋하기
+        final_answer = INT_MAX; // 리셋하기
 
         case_num += 1; // 다음 테스트 케이스
     }
+
+    return 0;
 }
