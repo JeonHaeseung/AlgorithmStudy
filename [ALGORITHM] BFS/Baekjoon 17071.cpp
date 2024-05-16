@@ -36,6 +36,7 @@ int solution(int n, int k) {
     queue<int> q;
     int young = k; // 동생의 처음 위치
     int accel = 1; // 동생의 가속도
+    int time = 1;  // 동생이 움직인 횟수
     q.push(n);
 
     while (!q.empty()) {
@@ -46,8 +47,9 @@ int solution(int n, int k) {
         if (!checkRange(young))
             return -1;
 
-        if (visited[accel % 2][young]) {
-            return accel;
+        // 짝수나 홀수 시간에 이미 방문된 곳을 동생이 방문한다면 그게 정답
+        if (visited[time % 2][young]) {
+            return time;
         }
 
         // 큐에 들어있는 같은 깊이만큼의 노드를 한번에 사용하기
@@ -58,21 +60,23 @@ int solution(int n, int k) {
 
             for (int nx : {curr + 1, curr - 1, curr * 2}) {
                 if (nx == young) {
-                    return accel;
+                    return time;
                 }
                 // 범위 바깥이라면 계산하지 않음
                 if (!checkRange(nx)) {
                     continue;
                 }
-                if (visited[accel % 2][nx])
+                // 짝수나 홀수 시간에 이미 방문했던 곳이라면 pass
+                if (visited[time % 2][nx])
                     continue;
 
-                visited[accel % 2][nx] = true;
+                visited[time % 2][nx] = true;
                 q.push(nx);
             }
         }
 
         accel++;
+        time++;
     }
 
     return -1;
